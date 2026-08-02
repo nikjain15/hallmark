@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { runAssay, fmtDate, fmtTime } from '@/lib/assay';
+import { runAssay, fmtDate, fmtTime, assertNotDegraded } from '@/lib/assay';
 import { PunchRow, MarkDetails, GapList, Signals } from '@/components/PunchRow';
 
 export const revalidate = 1800;
 
 export async function generateStaticParams() {
-  const { builders } = await runAssay();
+  // Build-only guard: refuse to ship an empty roster over a working one. See
+  // docs/FAILURE_MODES.md §F7.
+  const { builders } = assertNotDegraded(await runAssay());
   return builders.map((b) => ({ handle: b.handle }));
 }
 

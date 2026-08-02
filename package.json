@@ -8,8 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --test tests/*.test.mjs",
-    "assay": "node scripts/assay.mjs"
+    "test": "node --test tests/parse.test.mjs",
+    "assay": "node scripts/assay.mjs",
+    "test:e2e": "node --test tests/e2e.test.mjs"
   },
   "dependencies": {
     "next": "^16.2.12",

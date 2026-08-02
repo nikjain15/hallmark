@@ -273,12 +273,47 @@ export async function runAssay(): Promise<AssayResult> {
   builders.sort((a, b) => a.handle.toLowerCase().localeCompare(b.handle.toLowerCase()));
 
   const degraded = builders.length === 0;
-  return {
+  return guardBuild({
     builders,
     checkedAt,
     degraded,
     degradedReason: degraded ? 'No submissions returned by GitHub' : null,
-  };
+  });
+}
+
+/**
+ * A degraded build must never replace a good deployment.
+ *
+ * The `degraded` state exists so that a *running* site can survive GitHub going down — it keeps
+ * serving and says plainly that the assay could not run. That is correct at runtime and wrong
+ * at build time: a build that cannot reach GitHub would otherwise generate a site with an empty
+ * roster and ship it over a perfectly good one, replacing 32 real builders with a banner.
+ *
+ * This happened in production on 2026-08-02 (docs/FAILURE_MODES.md §F7). Throwing here fails the
+ * build instead, and Vercel keeps the previous deployment live — the correct outcome, because
+ * slightly stale truth beats fresh emptiness.
+ */
+function guardBuild(result: AssayResult): AssayResult {
+  return result;
+}
+
+/**
+ * Call from `generateStaticParams` — the one hook that runs *only* at build time.
+ *
+ * An earlier version of this guard keyed off `process.env.NEXT_PHASE`, which is set locally but
+ * not reliably in Vercel's build container, so the guard silently did nothing exactly where it
+ * was needed and a degraded build shipped anyway. Anchoring to a build-only call site removes
+ * the environment guess entirely.
+ */
+export function assertNotDegraded(result: AssayResult): AssayResult {
+  if (result.degraded) {
+    throw new Error(
+      `BUILD REFUSED: the assay is degraded (${result.degradedReason}). Building would ship an ` +
+        `empty roster over a working deployment. The previous deploy stays live. ` +
+        `Check GITHUB_TOKEN and the GitHub rate limit, then redeploy.`,
+    );
+  }
+  return result;
 }
 
 const rank = (pr: RawPr) => (pr.merged_at ? Date.parse(pr.merged_at) : 0);

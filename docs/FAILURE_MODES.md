@@ -79,6 +79,64 @@ next one fails in a pull request rather than at the deploy boundary.
 
 ---
 
+## F7 — A degraded build shipped over a good one
+
+**The break.** A deploy ran while the GitHub token was rate-limited (a consequence of F6). The
+assay returned `degraded: true` with zero builders, the build succeeded, and that empty site
+replaced a working one in production. For several minutes `hallmark.vercel.app` showed a banner
+where 32 builders had been.
+
+**Severity.** P1 — total loss of the product's content, from a transient upstream condition.
+
+**Why it happened.** The `degraded` state was designed for a *running* site: keep serving, say
+plainly that the assay could not run, never fabricate. That is right at runtime and exactly
+wrong at build time, where the same graceful path quietly produces an empty artefact and ships
+it. One state, two contexts, opposite correct behaviours.
+
+**How it was caught.** The end-to-end suite, minutes after it was written — the roster assertion
+failed against production. Manual smoke tests had passed, because every route still returned
+200. An empty site is perfectly healthy by status code.
+
+**Fix.** `guardBuild()` in `lib/assay.ts` throws when the assay is degraded during
+`phase-production-build`. The build fails, Vercel keeps the previous deployment, and stale truth
+beats fresh emptiness.
+
+**Guard.** The throw carries its own reasoning in the message and a doc comment explaining why
+runtime and build time must diverge — the tempting refactor is to "handle it gracefully
+everywhere", which reintroduces exactly this failure.
+
+---
+
+## F6 — The product exhausted its owner's GitHub quota
+
+**The break.** `/badge/[handle]` shipped as a dynamic route. Every request ran the full assay —
+~100 GitHub API calls. Badges are designed to live in other people's READMEs, where GitHub's
+camo image proxy fetches them aggressively and on every page view. Combined with repeated
+deploys (each also ~100 calls), this exhausted the deploy token's hourly quota and locked the
+owner out of the GitHub API entirely, including `gh` on the command line.
+
+**Severity.** P1, and the most interesting failure in the build because it only appears at the
+intersection of two individually-reasonable decisions: "badges should be live" and "evidence is
+fetched, never stored."
+
+**Why it was invisible:** it does not fail. Nothing errors, nothing 500s, no test goes red. The
+site keeps serving cached badges while, elsewhere, the owner's unrelated tooling starts
+returning 403. The blast radius lands outside the product.
+
+**Fix.** `generateStaticParams` on the badge route, so every known builder's badge is prebuilt
+at deploy time and served as a static asset. Requests now cost zero API calls.
+
+**Guard.** The route carries a comment explaining why it must not become dynamic again — the
+tempting "simplification" is to delete `generateStaticParams`, which silently reintroduces the
+failure.
+
+**Remaining exposure, stated:** the deploy token is a *personal* token, so the site's build
+still spends the owner's individual quota. The correct fix is a dedicated fine-grained token
+with read-only public-repo access, so that exhausting it degrades this site and nothing else.
+Recorded in `SAFETY.md` §Secrets and `COST.md` §The real constraint.
+
+---
+
 ## F5 — Hostile and malformed input sweep
 
 Five deliberately nasty inputs, run against the parsers:

@@ -3,6 +3,23 @@ import type { MarkId } from '@/lib/types';
 
 export const revalidate = 1800;
 
+/**
+ * Prebuild a badge for every known builder.
+ *
+ * Without this the route is dynamic, and every badge request runs the full assay — roughly
+ * 100 GitHub API calls. Badges live in READMEs behind GitHub's image proxy, which fetches
+ * them aggressively, so a dynamic badge would burn the deploy token's entire hourly quota
+ * and lock the owner out of the GitHub API. It did exactly that during the build.
+ * See docs/FAILURE_MODES.md §F6.
+ */
+export async function generateStaticParams() {
+  const { builders } = await runAssay();
+  return builders.map((b) => ({ handle: b.handle }));
+}
+
+/** An unknown handle still renders (all-hollow), it just isn't prebuilt. */
+export const dynamicParams = true;
+
 const ORDER: MarkId[] = ['ship', 'live', 'docs', 'open'];
 
 const INK = '#16130F';
