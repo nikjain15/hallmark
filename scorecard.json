@@ -1,0 +1,40 @@
+{
+  "project": "hallmark",
+  "title": "Hallmark — an independent assay of the Summer Pilot 2026 cohort",
+  "date": "2026-08-02",
+  "type": "non-ai-app",
+  "overall": 72,
+  "pillars": {
+    "Product Judgment": 8,
+    "System Design": 7,
+    "Evaluation": 6,
+    "Reliability & Ownership": 7,
+    "Safety": 7,
+    "Economics": 7,
+    "Communication": 8,
+    "UX/UI & Interaction": 9,
+    "Collaboration & Stakeholders": 6
+  },
+  "artifacts": {
+    "PRD.md": true,
+    "ARCHITECTURE.md": true,
+    "adr": true,
+    "UX.md": true,
+    "VISUAL.md": true,
+    "ENGINEERING.md": true,
+    "FAILURE_MODES.md": true,
+    "SAFETY.md": true,
+    "COST.md": true,
+    "STAKEHOLDERS.md": true,
+    "DECISION_LOG.md": true,
+    "evals": true,
+    "README.md": true,
+    "app": true
+  },
+  "questions": [],
+  "notes": "Provisional — recomputed honestly at close of build with per-question arithmetic.",
+  "weakest_pillar": "Collaboration & Stakeholders",
+  "next_focus": "Pending close-of-build recomputation.",
+  "loop_ran": false,
+  "projects_since_resource_refresh": 1
+}

@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hallmark — lo-fi wireframe</title>
+<style>
+  :root{
+    --paper:#FAF7F2; --ink:#16130F; --ink-soft:#5C554B; --rule:#D9D1C4;
+    --mark:#8A6A1F; --verified:#2F6B3A; --pending:#8C7A4E; --fault:#8C3A2E;
+    --display:Georgia,'Times New Roman',serif;
+    --body:system-ui,-apple-system,sans-serif;
+    --evidence:ui-monospace,'SF Mono',Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#EDEAE4;font-family:var(--body);color:var(--ink);line-height:1.5}
+  .wrap{max-width:1200px;margin:0 auto;padding:32px 16px 96px}
+  h1.doc{font-family:var(--display);font-size:32px;margin:0 0 4px}
+  .doc-sub{color:var(--ink-soft);font-size:14px;margin:0 0 32px}
+  .screen{background:var(--paper);border:1px solid var(--rule);margin:0 0 40px;padding:0;overflow:hidden}
+  .screen-label{background:var(--ink);color:var(--paper);font-family:var(--evidence);
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px}
+  .screen-body{padding:24px}
+  .row{display:flex;gap:16px;flex-wrap:wrap}
+  .box{border:1px dashed var(--rule);background:#fff;padding:12px;font-size:13px;color:var(--ink-soft)}
+  .lbl{font-family:var(--evidence);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--pending);display:block;margin-bottom:6px}
+  /* the punch row — the brand device */
+  .punches{display:flex;gap:8px;list-style:none;padding:0;margin:12px 0}
+  .punch{width:56px;height:56px;border:2px solid var(--rule);border-radius:3px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:var(--evidence);font-size:9px;letter-spacing:.05em;color:var(--pending);background:#fff}
+  .punch .glyph{font-size:16px;line-height:1}
+  .punch.struck{border-color:var(--mark);color:var(--mark);background:#FBF5E6;font-weight:700}
+  .punch.unknown{border-style:dashed}
+  .punch.lg{width:76px;height:76px;font-size:10px}
+  .skel{background:linear-gradient(90deg,#E8E3DA,#F3EFE8,#E8E3DA);border-radius:3px;height:14px}
+  .card{border:1px solid var(--rule);background:#fff;padding:14px;flex:1 1 260px;min-width:240px}
+  .mono{font-family:var(--evidence);font-size:12px}
+  .serif{font-family:var(--display)}
+  .hero-h{font-family:var(--display);font-size:40px;line-height:1.15;margin:8px 0 8px;max-width:16ch}
+  .banner{border:1px solid var(--pending);background:#FBF5E6;padding:8px 12px;font-size:13px;
+    font-family:var(--evidence);color:var(--mark);margin-bottom:16px}
+  .state-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+  .state{border:1px solid var(--rule);background:#fff;padding:12px;min-height:150px}
+  .state h4{margin:0 0 8px;font-family:var(--evidence);font-size:10px;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--ink-soft)}
+  .nav{display:flex;gap:16px;border-bottom:1px solid var(--rule);padding-bottom:12px;margin-bottom:20px;
+    font-size:13px;align-items:center;flex-wrap:wrap}
+  .nav .brand{font-family:var(--display);font-size:18px;font-weight:700;margin-right:auto}
+  .btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:8px 14px;font-size:13px;display:inline-block}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .mobile{max-width:340px;border:1px solid var(--rule);background:var(--paper);padding:16px}
+  .note{font-size:12px;color:var(--ink-soft);font-style:italic;margin-top:8px}
+  .tok{display:flex;align-items:center;gap:8px;font-family:var(--evidence);font-size:11px;margin-bottom:4px}
+  .sw{width:22px;height:22px;border:1px solid var(--rule)}
+  hr{border:0;border-top:1px solid var(--rule);margin:24px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="doc">Hallmark — lo-fi wireframe</h1>
+  <p class="doc-sub">Structure and states only. No visual design decisions beyond tokens. Every screen, every state, drawn.</p>
+
+  <!-- TOKENS -->
+  <div class="screen">
+    <div class="screen-label">Tokens — color roles &amp; type scale</div>
+    <div class="screen-body row">
+      <div style="flex:1 1 240px">
+        <span class="lbl">Color roles</span>
+        <div class="tok"><span class="sw" style="background:#FAF7F2"></span>--paper</div>
+        <div class="tok"><span class="sw" style="background:#16130F"></span>--ink</div>
+        <div class="tok"><span class="sw" style="background:#5C554B"></span>--ink-soft</div>
+        <div class="tok"><span class="sw" style="background:#D9D1C4"></span>--rule</div>
+        <div class="tok"><span class="sw" style="background:#8A6A1F"></span>--mark (struck punch)</div>
+        <div class="tok"><span class="sw" style="background:#2F6B3A"></span>--verified</div>
+        <div class="tok"><span class="sw" style="background:#8C7A4E"></span>--pending</div>
+        <div class="tok"><span class="sw" style="background:#8C3A2E"></span>--fault (rare)</div>
+      </div>
+      <div style="flex:1 1 240px">
+        <span class="lbl">Type — provenance rule</span>
+        <div class="serif" style="font-size:28px">Serif = human claim</div>
+        <div style="font-size:16px">Sans = prose</div>
+        <div class="mono">Mono = machine-verified</div>
+        <p class="note">If a human wrote it: serif/sans. If a machine checked it: mono. Typography tells you which claims are verified.</p>
+      </div>
+      <div style="flex:1 1 240px">
+        <span class="lbl">The punch row (brand device)</span>
+        <ul class="punches">
+          <li class="punch struck"><span class="glyph">⬢</span>SHIP</li>
+          <li class="punch struck"><span class="glyph">◉</span>LIVE</li>
+          <li class="punch"><span class="glyph">▤</span>DOCS</li>
+          <li class="punch unknown"><span class="glyph">?</span>OPEN</li>
+        </ul>
+        <p class="note">Struck = filled. Not yet = hollow. Couldn't check = dashed "?". Never red for "not yet".</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen">
+    <div class="screen-label">/ — The assay (success state)</div>
+    <div class="screen-body">
+      <div class="nav"><span class="brand">Hallmark</span><span>Roster</span><span>Method</span><span>Partners</span><span class="btn">Request an intro</span></div>
+      <span class="lbl">Hero</span>
+      <div class="mono" style="color:var(--mark)">SUMMER PILOT 2026 · INDEPENDENT ASSAY</div>
+      <h2 class="hero-h">The cohort, independently assayed.</h2>
+      <div class="box" style="max-width:52ch">Sub: Every mark below is an automated check, run identically for all 14 builders. The code that runs them is public. Nothing here is self-reported.</div>
+      <ul class="punches" style="margin-top:16px">
+        <li class="punch lg struck"><span class="glyph">⬢</span>SHIP</li>
+        <li class="punch lg struck"><span class="glyph">◉</span>LIVE</li>
+        <li class="punch lg struck"><span class="glyph">▤</span>DOCS</li>
+        <li class="punch lg struck"><span class="glyph">◈</span>OPEN</li>
+      </ul>
+      <div class="row" style="margin-top:16px">
+        <div class="box mono">14 builders assayed</div>
+        <div class="box mono">11 deploys responding</div>
+        <div class="box mono">last check 10:14 EDT</div>
+      </div>
+      <hr>
+      <span class="lbl">Roster preview (3 cards) → link to full roster</span>
+      <div class="row">
+        <div class="card"><b class="serif">Builder name</b><div class="mono">@handle</div>
+          <div style="font-size:12px;color:var(--ink-soft)">One-line positioning from their PR</div>
+          <ul class="punches"><li class="punch struck">SHIP</li><li class="punch struck">LIVE</li><li class="punch">DOCS</li><li class="punch struck">OPEN</li></ul></div>
+        <div class="card"><b class="serif">Builder name</b><div class="mono">@handle</div>
+          <div style="font-size:12px;color:var(--ink-soft)">One-line positioning</div>
+          <ul class="punches"><li class="punch struck">SHIP</li><li class="punch">LIVE</li><li class="punch struck">DOCS</li><li class="punch struck">OPEN</li></ul></div>
+        <div class="card"><b class="serif">Builder name</b><div class="mono">@handle</div>
+          <div style="font-size:12px;color:var(--ink-soft)">One-line positioning</div>
+          <ul class="punches"><li class="punch struck">SHIP</li><li class="punch struck">LIVE</li><li class="punch struck">DOCS</li><li class="punch struck">OPEN</li></ul></div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="box" style="flex:1">Method teaser — "What each mark guarantees →"</div>
+        <div class="box" style="flex:1">Partner CTA — "Reading this to hire? Start here →"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME STATES -->
+  <div class="screen">
+    <div class="screen-label">/ — other three states</div>
+    <div class="screen-body state-grid">
+      <div class="state"><h4>Empty</h4>
+        <div class="serif" style="font-size:20px">Assay opens when the first submission merges.</div>
+        <p class="note">Explains the standard + link to Method. Never a blank page.</p></div>
+      <div class="state"><h4>Loading</h4>
+        <div class="skel" style="width:70%;height:28px;margin-bottom:10px"></div>
+        <ul class="punches"><li class="punch"></li><li class="punch"></li><li class="punch"></li><li class="punch"></li></ul>
+        <div class="mono" style="color:var(--pending)">counts render as —</div></div>
+      <div class="state"><h4>Error / stale</h4>
+        <div class="banner">⚠ GitHub unreachable — showing last good check, 09:12 EDT · Retry</div>
+        <p class="note">Cached data still renders. We degrade, never blank.</p></div>
+      <div class="state"><h4>Success</h4>
+        <div class="mono">full hero + live counts (above)</div></div>
+    </div>
+  </div>
+
+  <!-- ROSTER -->
+  <div class="screen">
+    <div class="screen-label">/cohort — The roster</div>
+    <div class="screen-body">
+      <h2 class="serif" style="margin:0 0 4px">The roster</h2>
+      <div class="box" style="max-width:56ch;margin-bottom:12px">14 builders. Sorted alphabetically — never by score. Filter by mark, not by rank.</div>
+      <div class="row" style="margin-bottom:16px">
+        <div class="box mono">filter: all</div><div class="box mono">live only</div>
+        <div class="box mono">has docs</div><div class="box mono">A–Z ▾</div>
+      </div>
+      <div class="row">
+        <div class="card"><b class="serif">Name</b> <span class="mono">@handle</span>
+          <ul class="punches"><li class="punch struck">SHIP</li><li class="punch struck">LIVE</li><li class="punch struck">DOCS</li><li class="punch struck">OPEN</li></ul>
+          <div class="mono" style="font-size:11px">3 ships · P1 P2 P3</div></div>
+        <div class="card"><b class="serif">Name</b> <span class="mono">@handle</span>
+          <ul class="punches"><li class="punch struck">SHIP</li><li class="punch unknown">?</li><li class="punch struck">DOCS</li><li class="punch struck">OPEN</li></ul>
+          <div class="mono" style="font-size:11px">2 ships · P2 P3</div></div>
+        <div class="card"><b class="serif">Name</b> <span class="mono">@handle</span>
+          <ul class="punches"><li class="punch struck">SHIP</li><li class="punch struck">LIVE</li><li class="punch">DOCS</li><li class="punch struck">OPEN</li></ul>
+          <div class="mono" style="font-size:11px">3 ships · P1 P2 P3</div></div>
+        <div class="card"><b class="serif">Name</b> <span class="mono">@handle</span>
+          <ul class="punches"><li class="punch struck">SHIP</li><li class="punch struck">LIVE</li><li class="punch struck">DOCS</li><li class="punch struck">OPEN</li></ul>
+          <div class="mono" style="font-size:11px">3 ships</div></div>
+      </div>
+      <p class="note">Empty → "No submissions merged yet" + what will appear here. Loading → 8 skeleton cards. Error → cached grid, per-card stale badge.</p>
+    </div>
+  </div>
+
+  <!-- CERTIFICATE -->
+  <div class="screen">
+    <div class="screen-label">/builder/[handle] — The certificate</div>
+    <div class="screen-body">
+      <div class="row" style="align-items:flex-start">
+        <div style="flex:2 1 380px">
+          <div class="mono" style="color:var(--mark)">ASSAYED · SUMMER PILOT 2026</div>
+          <h2 class="serif" style="font-size:34px;margin:6px 0 2px">Builder Name</h2>
+          <div class="mono">@handle</div>
+          <ul class="punches" style="margin:16px 0">
+            <li class="punch lg struck"><span class="glyph">⬢</span>SHIP</li>
+            <li class="punch lg struck"><span class="glyph">◉</span>LIVE</li>
+            <li class="punch lg struck"><span class="glyph">▤</span>DOCS</li>
+            <li class="punch lg struck"><span class="glyph">◈</span>OPEN</li>
+          </ul>
+          <div class="mono" style="font-size:11px;color:var(--ink-soft)">each punch links to the check that struck it</div>
+        </div>
+        <div class="box" style="flex:1 1 200px">
+          <span class="lbl">Actions</span>
+          <div class="btn" style="margin-bottom:6px">Visit production ↗</div>
+          <div class="btn ghost">View repo ↗</div>
+        </div>
+      </div>
+      <hr>
+      <span class="lbl">Ships — one block per project</span>
+      <div class="row">
+        <div class="card"><div class="mono" style="color:var(--mark)">PROJECT 3</div>
+          <b class="serif">Project name</b>
+          <div style="font-size:12px;color:var(--ink-soft)">One-liner from PR body</div>
+          <div class="mono" style="font-size:11px;margin-top:8px">
+            ✓ merged 02 Aug 13:04<br>
+            ✓ deploy 200 · 340ms<br>
+            ✓ README 4.2kb<br>
+            ✓ repo public
+          </div></div>
+        <div class="card"><div class="mono" style="color:var(--mark)">PROJECT 2</div>
+          <b class="serif">Project name</b>
+          <div class="mono" style="font-size:11px;margin-top:8px">
+            ✓ merged 26 Jul<br>
+            ? deploy unknown — not reached<br>
+            ✓ README 1.1kb<br>
+            ✓ repo public
+          </div>
+          <p class="note">"unknown", never "failed".</p></div>
+        <div class="card"><div class="mono" style="color:var(--mark)">PROJECT 1</div>
+          <b class="serif">Project name</b>
+          <div class="mono" style="font-size:11px;margin-top:8px">✓ merged 19 Jul<br>✓ deploy 200</div></div>
+      </div>
+      <p class="note">Empty (handle not in cohort) → "No submission on record" + roster link. Loading → skeleton certificate. Error → punches from cache, checks show unknown.</p>
+    </div>
+  </div>
+
+  <!-- PARTNERS + METHOD -->
+  <div class="screen">
+    <div class="screen-label">/partners &amp; /method</div>
+    <div class="screen-body row">
+      <div style="flex:1 1 320px">
+        <h3 class="serif" style="margin:0 0 8px">/partners — How to read the mark</h3>
+        <div class="box" style="margin-bottom:8px"><b>What each punch guarantees</b> — 4 rows, plain English, one line each.</div>
+        <div class="box" style="margin-bottom:8px"><b>What it does NOT guarantee</b> — explicitly. Code quality, originality, and hireability are not measured. Honesty is the product.</div>
+        <div class="box"><b>Request an intro</b> — name, org, who you want to meet, message. Inline validation, preserves input on error, confirmation says what happens next and by when.</div>
+      </div>
+      <div style="flex:1 1 320px">
+        <h3 class="serif" style="margin:0 0 8px">/method — The published standard</h3>
+        <div class="box" style="margin-bottom:8px"><b>Each check, specified</b> — what it tests, what counts as pass, how often it runs, known false-negative modes.</div>
+        <div class="box" style="margin-bottom:8px"><b>Link to the code</b> — the actual checker, public. A standard you can't inspect isn't a standard.</div>
+        <div class="box"><b>Our own Build OS scorecard</b> — all nine pillars including the weak ones, with the arithmetic. We grade ourselves hardest.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE -->
+  <div class="screen">
+    <div class="screen-label">Mobile — 375px (roster)</div>
+    <div class="screen-body">
+      <div class="mobile">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--rule);padding-bottom:8px">
+          <b class="serif">Hallmark</b><span class="mono">☰</span>
+        </div>
+        <h3 class="serif" style="margin:12px 0 4px">The roster</h3>
+        <div class="mono" style="font-size:11px;color:var(--ink-soft)">14 builders · A–Z</div>
+        <div class="card" style="margin-top:12px">
+          <b class="serif">Builder Name</b><div class="mono" style="font-size:11px">@handle</div>
+          <ul class="punches" style="gap:6px">
+            <li class="punch" style="width:40px;height:40px;font-size:8px">SHIP</li>
+            <li class="punch struck" style="width:40px;height:40px;font-size:8px">LIVE</li>
+            <li class="punch struck" style="width:40px;height:40px;font-size:8px">DOCS</li>
+            <li class="punch struck" style="width:40px;height:40px;font-size:8px">OPEN</li>
+          </ul>
+        </div>
+        <div class="card" style="margin-top:10px">
+          <b class="serif">Builder Name</b><div class="mono" style="font-size:11px">@handle</div>
+          <ul class="punches" style="gap:6px">
+            <li class="punch struck" style="width:40px;height:40px;font-size:8px">SHIP</li>
+            <li class="punch struck" style="width:40px;height:40px;font-size:8px">LIVE</li>
+            <li class="punch" style="width:40px;height:40px;font-size:8px">DOCS</li>
+            <li class="punch struck" style="width:40px;height:40px;font-size:8px">OPEN</li>
+          </ul>
+        </div>
+        <p class="note">Punch row wraps 4-across at 40px. Single column, 16px margin.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
