@@ -213,10 +213,15 @@ test('no page leaks a stale domain or an unrendered value', async () => {
   const paths = ['/', '/cohort', '/method', '/partners', `/builder/${builders[0].handle}`];
   for (const p of paths) {
     const { body } = await get(p);
-    assert.ok(!body.includes('hallmark-eta'), `${p} still references the old domain`);
-    assert.ok(!body.includes('undefined'), `${p} rendered "undefined"`);
-    assert.ok(!body.includes('NaN'), `${p} rendered "NaN"`);
-    assert.ok(!body.includes('[object Object]'), `${p} rendered a raw object`);
+
+    // Strip <script> blocks first. React's flight payload legitimately contains `$undefined`
+    // markers that no user ever sees; asserting against raw HTML flags them as bugs.
+    const visible = body.replace(/<script[\s\S]*?<\/script>/gi, '');
+
+    assert.ok(!visible.includes('hallmark-eta'), `${p} still references the old domain`);
+    assert.ok(!visible.includes('undefined'), `${p} rendered "undefined" in visible markup`);
+    assert.ok(!visible.includes('NaN'), `${p} rendered "NaN"`);
+    assert.ok(!visible.includes('[object Object]'), `${p} rendered a raw object`);
   }
 });
 
