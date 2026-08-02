@@ -61,6 +61,21 @@ PRD's never-ship line. **Removed rather than corrected**, because no truthful me
 available through a cached fetch and an approximate one is not worth the risk. Live for ~40
 minutes. Full write-up in `FAILURE_MODES.md` §F2.
 
+### Signals are not marks
+Late in the build we added two further observations: whether the repo has CI workflows, and how
+recently it was pushed. The obvious move was to make them a fifth and sixth punch.
+
+**Rejected.** The four marks are the standard the cohort was effectively told about — they are
+derived from the submission template everyone filled in. Adding punches now would judge 32
+people against a bar invented *after* they submitted, chosen by someone competing alongside
+them, and — not incidentally — a bar this project happens to pass. That is the definition of
+self-serving.
+
+So signals render **only on a builder's own certificate**, labelled "not marks, not scored", and
+are deliberately excluded from the roster, the share card, the badge and the public API — every
+surface where they could be compared across people. Enforced in `lib/types.ts` with the reason
+in the type's own doc comment.
+
 ### Ranking: never
 `assay.ts` sorts alphabetically, with the reason in a code comment so it survives refactoring.
 There is no sort-by-score anywhere in the product. This is the constraint that lets a

@@ -35,7 +35,7 @@ The mitigations are structural rather than promised:
 |---|---|---|
 | Nik | Name, positioning, audience, game-layer depth | **Obtained** — see `PRD.md` provenance tags |
 | Program | Merge bar compliance | Self-checkable: exact PR title, four required body sections, merged before 17:00 EDT |
-| Cohort members | Consent to appear | **Not obtained, and not sought.** All content is public and submitted to a shared cohort repo for this purpose. Removal offered instead of consent requested. This is the defensible position, not the maximally cautious one — recorded so the trade is visible. |
+| Cohort members | Consent to appear | **Not obtained, and not sought** — Nik's call `[builder]`, choosing "public data + removal on request" over opt-in-only or notify-then-publish. All content was submitted publicly to a shared cohort repo for exactly this audience; anyone can be removed instantly with no account. This is the defensible position, not the maximally cautious one — recorded so the trade is visible. |
 
 ## Pushback (CS1)
 
