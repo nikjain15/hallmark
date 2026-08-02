@@ -11,7 +11,20 @@ const BRANCHES = [
 /** Checks are re-run at most this often. See docs/ARCHITECTURE.md §Performance budget. */
 const REVALIDATE = 1800; // 30 min
 const PROBE_TIMEOUT_MS = 6000;
-const PROBE_CONCURRENCY = 6;
+
+/**
+ * How many builders are assayed at once.
+ *
+ * Each builder costs three GitHub calls plus one probe of their deploy, so this is really a
+ * burst-rate control on the GitHub API. It was 6, which fired ~100 calls within a few seconds
+ * of build start and tripped GitHub's *secondary* rate limit — the one that returns 403 while
+ * `x-ratelimit-remaining` still reads in the thousands, so it looks nothing like exhaustion.
+ * See docs/FAILURE_MODES.md §F6.
+ */
+const PROBE_CONCURRENCY = 3;
+
+/** Pause between GitHub calls within a worker, to stay under the burst threshold. */
+const GH_THROTTLE_MS = 120;
 
 function gh(): HeadersInit {
   const h: Record<string, string> = {
@@ -24,13 +37,26 @@ function gh(): HeadersInit {
   return h;
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 async function ghJson<T>(path: string): Promise<T | null> {
   try {
     const res = await fetch(`https://api.github.com${path}`, {
       headers: gh(),
       next: { revalidate: REVALIDATE },
     });
+    // A 403 with quota still on the clock is GitHub's secondary (burst) limit, not exhaustion.
+    // Back off once rather than hammering — the whole build is what tripped it.
+    if (res.status === 403 || res.status === 429) {
+      await sleep(2000);
+      const retry = await fetch(`https://api.github.com${path}`, {
+        headers: gh(),
+        next: { revalidate: REVALIDATE },
+      });
+      return retry.ok ? ((await retry.json()) as T) : null;
+    }
     if (!res.ok) return null;
+    await sleep(GH_THROTTLE_MS);
     return (await res.json()) as T;
   } catch {
     return null;
