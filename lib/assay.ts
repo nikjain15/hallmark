@@ -108,8 +108,11 @@ async function assayShip(pr: RawPr, project: number): Promise<Ship> {
     live = !r
       ? mark('live', 'unknown', `Could not reach ${host(prod)} within ${PROBE_TIMEOUT_MS / 1000}s — not checked`)
       : r.ok
-        ? mark('live', 'struck', `${host(prod)} responded ${r.status} in ${r.ms}ms`)
+        ? mark('live', 'struck', `${host(prod)} responded ${r.status}`)
         : mark('live', 'not-yet', `${host(prod)} responded ${r.status}`);
+    // Deliberately no latency figure: probes are served from the fetch cache between
+    // revalidations, so any duration we measured here would be the cache's, not the peer's.
+    // Reporting it would be exactly the kind of unearned number this site exists to refuse.
   }
 
   let docs: Mark;

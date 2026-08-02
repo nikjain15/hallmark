@@ -25,6 +25,28 @@ export default async function Certificate({ params }: { params: Promise<{ handle
 
   if (!builder) notFound();
 
+  const struck = builder.marks.filter((m) => m.state === 'struck').length;
+  const pageUrl = `https://hallmark-eta.vercel.app/builder/${builder.handle}`;
+  const shareText = `Assayed: ${struck}/4 marks struck on my Summer Pilot 2026 build.`;
+  const shareX = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`;
+  const shareLi = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`;
+
+  // The correction path. GitHub-native and pre-filled, so a peer can dispute a mark without
+  // this site ever needing a form, a database, or an account — see ENGINEERING.md §Tracked
+  // tech debt. Every mark's evidence is included so the report is actionable on arrival.
+  const disputeBody = [
+    `Page: ${pageUrl}`,
+    '',
+    'What the marks currently say:',
+    ...builder.marks.map((m) => `- ${m.id}: ${m.state} — ${m.detail}`),
+    '',
+    'What is wrong, and what it should be:',
+    '',
+  ].join('\n');
+  const disputeUrl =
+    `https://github.com/nikjain15/hallmark/issues/new?title=${encodeURIComponent(`Mark correction: @${builder.handle}`)}` +
+    `&body=${encodeURIComponent(disputeBody)}&labels=correction`;
+
   return (
     <div className="wrap">
       <section>
@@ -39,7 +61,10 @@ export default async function Certificate({ params }: { params: Promise<{ handle
           <MarkDetails marks={builder.marks} />
         </div>
         <p className="mono muted" style={{ marginTop: 'var(--s3)', fontSize: '0.6875rem' }}>
-          marks reflect the most recent submission · last check {fmtTime(checkedAt)} ET
+          marks reflect the most recent submission · last check {fmtTime(checkedAt)} ET ·{' '}
+          <a href={disputeUrl} rel="noopener noreferrer" target="_blank" style={{ color: 'var(--mark)' }}>
+            a mark wrong? tell us ↗
+          </a>
         </p>
 
         {builder.ships[0]?.productionUrl && (
@@ -102,6 +127,34 @@ export default async function Certificate({ params }: { params: Promise<{ handle
               )}
             </article>
           ))}
+        </div>
+      </section>
+
+      <section>
+        <h2>Your card</h2>
+        <p className="lede" style={{ marginTop: 'var(--s2)' }}>
+          {struck === 4
+            ? 'All four marks struck. This card is what appears when you post the link.'
+            : `${struck} of 4 marks struck. Share it as it stands — a partial row is a record of where the work is, not a rejection.`}
+        </p>
+
+        <img
+          src={`/builder/${builder.handle}/opengraph-image`}
+          alt={`Hallmark certificate card for @${builder.handle}: ${struck} of 4 marks struck`}
+          width={1200}
+          height={630}
+          style={{
+            width: '100%', maxWidth: 620, height: 'auto', marginTop: 'var(--s4)',
+            border: '1px solid var(--rule)', borderRadius: 3, display: 'block',
+          }}
+        />
+
+        <div style={{ display: 'flex', gap: 'var(--s2)', marginTop: 'var(--s3)', flexWrap: 'wrap' }}>
+          <a className="btn" href={shareX} rel="noopener noreferrer" target="_blank">Post on X</a>
+          <a className="btn ghost" href={shareLi} rel="noopener noreferrer" target="_blank">Share on LinkedIn</a>
+          <a className="btn ghost" href={`/builder/${builder.handle}/opengraph-image`} download={`hallmark-${builder.handle}.png`}>
+            Download card
+          </a>
         </div>
       </section>
 

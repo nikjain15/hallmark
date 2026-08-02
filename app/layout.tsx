@@ -3,7 +3,7 @@ import Link from 'next/link';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://hallmark-cohort.vercel.app'),
+  metadataBase: new URL('https://hallmark-eta.vercel.app'),
   title: {
     default: 'Hallmark — the Summer Pilot 2026 cohort, independently assayed',
     template: '%s · Hallmark',

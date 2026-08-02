@@ -1,0 +1,41 @@
+name: CI
+
+# The gate. A pull request cannot merge unless every job here is green — see
+# docs/ENGINEERING.md §CI gate. Branch protection on `main` requires the `verify` check.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Unit tests (parsers)
+        run: npm test
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Dependency audit
+        # SH10: a known-vulnerable dependency fails the build rather than shipping quietly.
+        # This gate is real — it caught next@15.1.6 during the initial build.
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Build
+        # Runs the real assay against the live GitHub API, so a breaking change to parsing
+        # or checking fails here rather than on production.
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

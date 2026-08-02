@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hallmark — share card, lo-fi options</title>
+<style>
+  :root{
+    --paper:#FAF7F2; --ink:#16130F; --ink-soft:#5C554B; --rule:#D9D1C4;
+    --mark:#8A6A1F; --mark-wash:#FBF5E6;
+    --display:Georgia,'Times New Roman',serif;
+    --body:system-ui,-apple-system,sans-serif;
+    --evidence:ui-monospace,'SF Mono',Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#E9E5DE;font-family:var(--body);color:var(--ink);padding:32px 16px 96px}
+  .wrap{max-width:1180px;margin:0 auto}
+  h1{font-family:var(--display);font-size:30px;margin:0 0 4px}
+  .sub{color:var(--ink-soft);font-size:14px;margin:0 0 28px}
+  h2{font-family:var(--evidence);font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+     color:var(--ink-soft);margin:36px 0 10px;font-weight:400}
+  .verdict{font-size:13px;color:var(--ink-soft);margin:10px 0 0;max-width:62ch;font-style:italic}
+
+  /* 1200x630 at 0.5 scale = 600x315 */
+  .card{width:600px;height:315px;background:var(--paper);border:1px solid var(--rule);
+        position:relative;overflow:hidden;display:flex}
+  .card.dark{background:#12100D;border-color:#3A342C}
+  .card.dark .ink{color:#F4EFE6} .card.dark .soft{color:#A99F90}
+  .ink{color:var(--ink)} .soft{color:var(--ink-soft)}
+
+  .punches{display:flex;gap:8px;list-style:none;padding:0;margin:0}
+  .punch{width:62px;height:62px;border:2px solid var(--mark);border-radius:3px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    font-family:var(--evidence);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--mark);background:var(--mark-wash);font-weight:700}
+  .card.dark .punch{background:#241D0F;border-color:#D8B45A;color:#D8B45A}
+  .punch .g{font-size:17px;line-height:1}
+  .punch.big{width:76px;height:76px;font-size:10px}
+  .punch.big .g{font-size:22px}
+
+  .avatar{width:60px;height:60px;border-radius:50%;background:var(--rule);flex:none;
+          border:2px solid var(--mark)}
+  .brandline{font-family:var(--display);font-size:16px;font-weight:700}
+  .brandline i{color:var(--mark);font-style:normal}
+  .url{font-family:var(--evidence);font-size:12px;color:var(--mark);word-break:break-all}
+  .name{font-family:var(--display);font-size:30px;line-height:1.1;margin:0}
+  .handle{font-family:var(--evidence);font-size:13px;margin:2px 0 0}
+  .rulehair{height:1px;background:var(--rule);margin:14px 0}
+  .card.dark .rulehair{background:#3A342C}
+  .stamp{position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;
+         border:2px dashed var(--mark);opacity:.25}
+  .foot{font-family:var(--evidence);font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+
+  .row{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+  .opt{}
+  .opt .tag{font-family:var(--evidence);font-size:10px;background:var(--ink);color:var(--paper);
+            padding:3px 8px;display:inline-block;margin-bottom:8px;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Share card — lo-fi options</h1>
+  <p class="sub">1200×630 (shown at 50%). Contains: struck punch row · name, handle, avatar · live production link. No one-liner, by decision.</p>
+
+  <!-- OPTION A -->
+  <h2>Option A — The certificate</h2>
+  <div class="row">
+    <div class="opt">
+      <span class="tag">A · LIGHT</span>
+      <div class="card" style="flex-direction:column;padding:34px 38px;justify-content:space-between">
+        <div class="stamp"></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="foot" style="color:var(--mark)">Summer Pilot 2026 · Assayed</div>
+            <p class="name ink" style="margin-top:10px">Builder Name</p>
+            <div class="handle soft">@handle</div>
+          </div>
+          <div class="avatar"></div>
+        </div>
+        <div>
+          <ul class="punches">
+            <li class="punch"><span class="g">⬢</span>Ship</li>
+            <li class="punch"><span class="g">◉</span>Live</li>
+            <li class="punch"><span class="g">▤</span>Docs</li>
+            <li class="punch"><span class="g">◈</span>Open</li>
+          </ul>
+          <div class="rulehair"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <span class="url">myproject.vercel.app</span>
+            <span class="brandline ink">Hall<i>mark</i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opt">
+      <span class="tag">A · DARK</span>
+      <div class="card dark" style="flex-direction:column;padding:34px 38px;justify-content:space-between">
+        <div class="stamp"></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="foot" style="color:#D8B45A">Summer Pilot 2026 · Assayed</div>
+            <p class="name ink" style="margin-top:10px">Builder Name</p>
+            <div class="handle soft">@handle</div>
+          </div>
+          <div class="avatar"></div>
+        </div>
+        <div>
+          <ul class="punches">
+            <li class="punch"><span class="g">⬢</span>Ship</li>
+            <li class="punch"><span class="g">◉</span>Live</li>
+            <li class="punch"><span class="g">▤</span>Docs</li>
+            <li class="punch"><span class="g">◈</span>Open</li>
+          </ul>
+          <div class="rulehair"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <span class="url" style="color:#D8B45A">myproject.vercel.app</span>
+            <span class="brandline ink">Hall<i>mark</i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="verdict">Reads as a document you were awarded. Punches sit on the baseline like a signature row. Most "trophy", least busy — and the dark variant is what actually pops in a feed.</p>
+
+  <!-- OPTION B -->
+  <h2>Option B — Punches as hero</h2>
+  <div class="row">
+    <div class="opt">
+      <span class="tag">B · LIGHT</span>
+      <div class="card" style="flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;gap:16px">
+        <ul class="punches">
+          <li class="punch big"><span class="g">⬢</span>Ship</li>
+          <li class="punch big"><span class="g">◉</span>Live</li>
+          <li class="punch big"><span class="g">▤</span>Docs</li>
+          <li class="punch big"><span class="g">◈</span>Open</li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar" style="width:40px;height:40px"></div>
+          <div style="text-align:left">
+            <p class="name ink" style="font-size:22px">Builder Name</p>
+            <div class="handle soft">@handle</div>
+          </div>
+        </div>
+        <div class="url">myproject.vercel.app</div>
+        <div class="foot soft">Hallmark · Summer Pilot 2026</div>
+      </div>
+    </div>
+
+    <div class="opt">
+      <span class="tag">B · DARK</span>
+      <div class="card dark" style="flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;gap:16px">
+        <ul class="punches">
+          <li class="punch big"><span class="g">⬢</span>Ship</li>
+          <li class="punch big"><span class="g">◉</span>Live</li>
+          <li class="punch big"><span class="g">▤</span>Docs</li>
+          <li class="punch big"><span class="g">◈</span>Open</li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar" style="width:40px;height:40px"></div>
+          <div style="text-align:left">
+            <p class="name ink" style="font-size:22px">Builder Name</p>
+            <div class="handle soft">@handle</div>
+          </div>
+        </div>
+        <div class="url" style="color:#D8B45A">myproject.vercel.app</div>
+        <div class="foot soft">Hallmark · Summer Pilot 2026</div>
+      </div>
+    </div>
+  </div>
+  <p class="verdict">Maximum "I collected these." The marks are unmissable at thumbnail size, which is the size that matters in a feed. Identity is secondary — reads more like a badge than a certificate.</p>
+
+  <!-- OPTION C -->
+  <h2>Option C — Split: identity left, marks right</h2>
+  <div class="row">
+    <div class="opt">
+      <span class="tag">C · DARK</span>
+      <div class="card dark">
+        <div style="flex:1.15;padding:34px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid #3A342C">
+          <div class="foot" style="color:#D8B45A">Assayed · 2026</div>
+          <div>
+            <div class="avatar" style="margin-bottom:12px"></div>
+            <p class="name ink">Builder Name</p>
+            <div class="handle soft">@handle</div>
+          </div>
+          <div class="url" style="color:#D8B45A">myproject.vercel.app</div>
+        </div>
+        <div style="flex:1;padding:34px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div style="display:flex;gap:8px"><span class="punch"><span class="g">⬢</span>Ship</span><span class="punch"><span class="g">◉</span>Live</span></div>
+          <div style="display:flex;gap:8px"><span class="punch"><span class="g">▤</span>Docs</span><span class="punch"><span class="g">◈</span>Open</span></div>
+          <div class="brandline ink" style="margin-top:6px">Hall<i>mark</i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opt">
+      <span class="tag">C · LIGHT</span>
+      <div class="card">
+        <div style="flex:1.15;padding:34px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--rule)">
+          <div class="foot" style="color:var(--mark)">Assayed · 2026</div>
+          <div>
+            <div class="avatar" style="margin-bottom:12px"></div>
+            <p class="name ink">Builder Name</p>
+            <div class="handle soft">@handle</div>
+          </div>
+          <div class="url">myproject.vercel.app</div>
+        </div>
+        <div style="flex:1;padding:34px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div style="display:flex;gap:8px"><span class="punch"><span class="g">⬢</span>Ship</span><span class="punch"><span class="g">◉</span>Live</span></div>
+          <div style="display:flex;gap:8px"><span class="punch"><span class="g">▤</span>Docs</span><span class="punch"><span class="g">◈</span>Open</span></div>
+          <div class="brandline ink" style="margin-top:6px">Hall<i>mark</i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="verdict">Balances person and proof. The 2×2 punch block reads as a seal. Busiest of the three, and the split makes the marks smaller at thumbnail size.</p>
+
+  <h2>Partial state — not everyone has four</h2>
+  <div class="row">
+    <div class="opt">
+      <span class="tag">A · 2 OF 4 STRUCK</span>
+      <div class="card" style="flex-direction:column;padding:34px 38px;justify-content:space-between">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="foot" style="color:var(--mark)">Summer Pilot 2026 · Assayed</div>
+            <p class="name ink" style="margin-top:10px">Builder Name</p>
+            <div class="handle soft">@handle</div>
+          </div>
+          <div class="avatar"></div>
+        </div>
+        <div>
+          <ul class="punches">
+            <li class="punch"><span class="g">⬢</span>Ship</li>
+            <li class="punch"><span class="g">◉</span>Live</li>
+            <li class="punch" style="border-color:var(--rule);background:#fff;color:#8C7A4E;font-weight:400"><span class="g">▤</span>Docs</li>
+            <li class="punch" style="border-color:var(--rule);background:#fff;color:#8C7A4E;font-weight:400;border-style:dashed"><span class="g">?</span>Open</li>
+          </ul>
+          <div class="rulehair"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <span class="url">myproject.vercel.app</span>
+            <span class="brandline ink">Hall<i>mark</i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="verdict">Critical: a builder must be able to share a card that isn't full marks without it looking like a rejection notice. Hollow reads as "not yet", dashed as "not checked" — same rule as the site.</p>
+</div>
+</body>
+</html>
