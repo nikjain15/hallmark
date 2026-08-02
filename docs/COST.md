@@ -10,7 +10,7 @@ There is no model in the loop, so the cost lines are hosting, egress, and third-
 | Bandwidth | ~110kB shared JS + ~190B/route HTML; OG cards 55kB each | **$0** at cohort scale (Hobby includes 100GB/mo) |
 | GitHub API | ~100 calls per regeneration | **$0** (5,000/hr authenticated) |
 | Outbound probes | 32 GETs per regeneration against peers' hosts | **$0** to us |
-| Domain | none — using `hallmark-eta.vercel.app` | **$0** |
+| Domain | none — using `hallmark.vercel.app` | **$0** |
 
 **Marginal cost per page view: effectively zero**, because every page is static HTML served from
 Vercel's edge. A viewer does not trigger a GitHub call, a probe, or a function invocation.

@@ -17,7 +17,7 @@ const esc = (s: string) =>
  * An embeddable marks badge, for a builder's own README.
  *
  * ```md
- * [![Hallmark](https://hallmark-eta.vercel.app/badge/you)](https://hallmark-eta.vercel.app/builder/you)
+ * [![Hallmark](https://hallmark.vercel.app/badge/you)](https://hallmark.vercel.app/builder/you)
  * ```
  *
  * Only the four published marks appear — never signals, never a rank, and never a number

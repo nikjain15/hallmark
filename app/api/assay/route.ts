@@ -38,8 +38,8 @@ export async function GET() {
         handle: b.handle,
         name: b.name,
         avatarUrl: b.avatarUrl,
-        url: `https://hallmark-eta.vercel.app/builder/${b.handle}`,
-        badge: `https://hallmark-eta.vercel.app/badge/${b.handle}`,
+        url: `https://hallmark.vercel.app/builder/${b.handle}`,
+        badge: `https://hallmark.vercel.app/badge/${b.handle}`,
         marks: b.marks.map(({ id, state, detail }) => ({ id, state, detail })),
         ships: b.ships.map((s) => ({
           project: s.project,

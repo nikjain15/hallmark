@@ -2,7 +2,7 @@
 
 **The Summer Pilot 2026 cohort, independently assayed.**
 
-🔗 **[hallmark-eta.vercel.app](https://hallmark-eta.vercel.app)**
+🔗 **[hallmark.vercel.app](https://hallmark.vercel.app)**
 
 ---
 
@@ -37,11 +37,11 @@ This is the part most showcases leave out, so it is the part we put first.
 
 ### A suggested twenty minutes
 
-1. Open the [roster](https://hallmark-eta.vercel.app/cohort) and scan for four struck marks.
+1. Open the [roster](https://hallmark.vercel.app/cohort) and scan for four struck marks.
 2. Follow two or three live production links — they were responding when last checked.
 3. Read each builder's positioning line, quoted verbatim from their own submission. We never
    paraphrase a peer.
-4. [Ask for an introduction](https://hallmark-eta.vercel.app/partners).
+4. [Ask for an introduction](https://hallmark.vercel.app/partners).
 
 ---
 
@@ -86,7 +86,7 @@ npm test                                             # 13 parser tests
 Hallmark was built against [Build OS](https://nikjain15.github.io/build-os/) — a published
 rubric of nine craft pillars. The full artifact set lives in [`docs/`](docs/), and this
 project's own scorecard is in [`scorecard.json`](scorecard.json) and rendered publicly at
-[/method](https://hallmark-eta.vercel.app/method), weak pillars included.
+[/method](https://hallmark.vercel.app/method), weak pillars included.
 
 This build also produced the first draft of a proposed **10th artifact** for Build OS — a
 graded low-fidelity visual spec written *before* any application code. See

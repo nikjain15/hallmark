@@ -26,11 +26,11 @@ export default async function Certificate({ params }: { params: Promise<{ handle
   if (!builder) notFound();
 
   const struck = builder.marks.filter((m) => m.state === 'struck').length;
-  const pageUrl = `https://hallmark-eta.vercel.app/builder/${builder.handle}`;
+  const pageUrl = `https://hallmark.vercel.app/builder/${builder.handle}`;
   const shareText = `Assayed: ${struck}/4 marks struck on my Summer Pilot 2026 build.`;
   const shareX = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`;
   const shareLi = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`;
-  const badgeMd = `[![Hallmark](https://hallmark-eta.vercel.app/badge/${builder.handle})](${pageUrl})`;
+  const badgeMd = `[![Hallmark](https://hallmark.vercel.app/badge/${builder.handle})](${pageUrl})`;
 
   // The correction path. GitHub-native and pre-filled, so a peer can dispute a mark without
   // this site ever needing a form, a database, or an account — see ENGINEERING.md §Tracked
