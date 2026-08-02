@@ -36,7 +36,7 @@ export default async function Home() {
           <PunchRow
             size="lg"
             caption="The four marks"
-            marks={LEGEND.map((id) => ({ id, state: 'struck' as const, detail: MEANING[id] }))}
+            marks={LEGEND.map((id) => ({ id, state: 'struck' as const, detail: MEANING[id], remedy: null }))}
           />
         </div>
 

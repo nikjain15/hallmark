@@ -16,6 +16,30 @@ export interface Mark {
   state: MarkState;
   /** Plain-English statement of what was actually verified, shown to users and screen readers. */
   detail: string;
+  /**
+   * What the builder would do to strike this mark, when it isn't struck.
+   *
+   * This is what turns a hollow punch from a dead end into an instruction — the loop is
+   * check → gap → fix → verified on the next run. `null` when struck, or when the remedy
+   * isn't ours to suggest.
+   */
+  remedy: string | null;
+}
+
+/**
+ * Signals are NOT marks.
+ *
+ * The four marks are the published standard the cohort was told about. Signals are extra
+ * observations added later — so scoring peers against them would be judging 32 people by a
+ * bar invented after they submitted, by someone competing alongside them. They render on a
+ * builder's own certificate as context, never on the roster, the share card, or the badge.
+ * See docs/DECISION_LOG.md §Signals are not marks.
+ */
+export interface Signal {
+  id: 'tests' | 'fresh';
+  label: string;
+  value: string;
+  positive: boolean | null;
 }
 
 export interface Ship {
@@ -31,6 +55,7 @@ export interface Ship {
   oneLiner: string | null;
   profileUrls: string[];
   marks: Mark[];
+  signals: Signal[];
 }
 
 export interface Builder {

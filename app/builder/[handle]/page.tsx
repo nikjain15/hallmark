@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { runAssay, fmtDate, fmtTime } from '@/lib/assay';
-import { PunchRow, MarkDetails } from '@/components/PunchRow';
+import { PunchRow, MarkDetails, GapList, Signals } from '@/components/PunchRow';
 
 export const revalidate = 1800;
 
@@ -30,6 +30,7 @@ export default async function Certificate({ params }: { params: Promise<{ handle
   const shareText = `Assayed: ${struck}/4 marks struck on my Summer Pilot 2026 build.`;
   const shareX = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`;
   const shareLi = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`;
+  const badgeMd = `[![Hallmark](https://hallmark-eta.vercel.app/badge/${builder.handle})](${pageUrl})`;
 
   // The correction path. GitHub-native and pre-filled, so a peer can dispute a mark without
   // this site ever needing a form, a database, or an account — see ENGINEERING.md §Tracked
@@ -66,6 +67,9 @@ export default async function Certificate({ params }: { params: Promise<{ handle
             a mark wrong? tell us ↗
           </a>
         </p>
+
+        <GapList marks={builder.marks} />
+        <Signals signals={builder.ships[0]?.signals ?? []} />
 
         {builder.ships[0]?.productionUrl && (
           <div style={{ display: 'flex', gap: 'var(--s2)', marginTop: 'var(--s4)', flexWrap: 'wrap' }}>
@@ -156,6 +160,24 @@ export default async function Certificate({ params }: { params: Promise<{ handle
             Download card
           </a>
         </div>
+      </section>
+
+      <section>
+        <h2>Badge for your README</h2>
+        <p className="lede" style={{ marginTop: 'var(--s2)' }}>
+          A live badge of your marks, the same way a CI badge works. It re-checks on its own — if
+          you strike a mark tomorrow, the badge updates without you touching it.
+        </p>
+
+        <p style={{ marginTop: 'var(--s4)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`/badge/${builder.handle}`} alt={`Hallmark marks for @${builder.handle}`} height={20} />
+        </p>
+
+        <div className="snippet">{badgeMd}</div>
+        <p className="mono muted" style={{ fontSize: '0.6875rem', marginTop: 'var(--s2)' }}>
+          paste into your README · <a href="/api/assay" style={{ color: 'var(--mark)' }}>or take the raw data ↗</a>
+        </p>
       </section>
 
       <section>

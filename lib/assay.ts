@@ -1,4 +1,4 @@
-import type { AssayResult, Builder, Mark, MarkState, Ship } from './types';
+import type { AssayResult, Builder, Mark, MarkState, Ship, Signal } from './types';
 import { oneLiner, productionUrl, profileUrls, projectNumber, repoUrl } from './parse';
 
 const COHORT_REPO = 'rogerSuperBuilderAlpha/hult-cohort-program';
@@ -74,7 +74,15 @@ async function pooled<T, R>(items: T[], limit: number, work: (t: T) => Promise<R
   return out;
 }
 
-const mark = (id: Mark['id'], state: MarkState, detail: string): Mark => ({ id, state, detail });
+const mark = (id: Mark['id'], state: MarkState, detail: string, remedy: string | null = null): Mark => ({
+  id,
+  state,
+  detail,
+  remedy: state === 'struck' ? null : remedy,
+});
+
+/** Days after which a repo counts as unmaintained for the FRESH signal. */
+const FRESH_DAYS = 14;
 
 interface RawPr {
   number: number;
@@ -98,18 +106,38 @@ async function assayShip(pr: RawPr, project: number): Promise<Ship> {
 
   const ship = pr.merged_at
     ? mark('ship', 'struck', `Submission PR #${pr.number} merged ${fmtDate(pr.merged_at)}`)
-    : mark('ship', 'not-yet', `Submission PR #${pr.number} is open, not yet merged`);
+    : mark(
+        'ship',
+        'not-yet',
+        `Submission PR #${pr.number} is open, not yet merged`,
+        'The cohort maintainer merges submission PRs. Make sure the title matches the template exactly and every required body section is filled.',
+      );
 
   let live: Mark;
   if (!prod) {
-    live = mark('live', 'not-yet', 'No production URL given in the submission');
+    live = mark(
+      'live',
+      'not-yet',
+      'No production URL given in the submission',
+      'Add a "## Production URL" section to the submission PR body with the deployed link.',
+    );
   } else {
     const r = await probe(prod);
     live = !r
-      ? mark('live', 'unknown', `Could not reach ${host(prod)} within ${PROBE_TIMEOUT_MS / 1000}s — not checked`)
+      ? mark(
+          'live',
+          'unknown',
+          `Could not reach ${host(prod)} within ${PROBE_TIMEOUT_MS / 1000}s — not checked`,
+          `Nothing may be wrong. A cold start or a bot filter can exceed our ${PROBE_TIMEOUT_MS / 1000}s timeout. If ${host(prod)} loads for you, this will likely strike on the next check.`,
+        )
       : r.ok
         ? mark('live', 'struck', `${host(prod)} responded ${r.status}`)
-        : mark('live', 'not-yet', `${host(prod)} responded ${r.status}`);
+        : mark(
+            'live',
+            'not-yet',
+            `${host(prod)} responded ${r.status}`,
+            `The deploy is reachable but returned ${r.status}. Check the deployment logs, then re-check in 30 minutes.`,
+          );
     // Deliberately no latency figure: probes are served from the fetch cache between
     // revalidations, so any duration we measured here would be the cache's, not the peer's.
     // Reporting it would be exactly the kind of unearned number this site exists to refuse.
@@ -117,25 +145,58 @@ async function assayShip(pr: RawPr, project: number): Promise<Ship> {
 
   let docs: Mark;
   let open: Mark;
+  const signals: Signal[] = [];
+
   if (!repo) {
-    docs = mark('docs', 'not-yet', 'No build repo linked in the submission');
-    open = mark('open', 'not-yet', 'No build repo linked in the submission');
+    const remedy = 'Link your build repo in the submission PR body, e.g. "Build repo: https://github.com/you/project".';
+    docs = mark('docs', 'not-yet', 'No build repo linked in the submission', remedy);
+    open = mark('open', 'not-yet', 'No build repo linked in the submission', remedy);
   } else {
     const slug = repo.replace('https://github.com/', '');
-    const [meta, readme] = await Promise.all([
-      ghJson<{ private: boolean; pushed_at: string }>(`/repos/${slug}`),
+    const [meta, readme, workflows] = await Promise.all([
+      ghJson<{ private: boolean; pushed_at: string; language: string | null }>(`/repos/${slug}`),
       ghJson<{ size: number }>(`/repos/${slug}/readme`),
+      ghJson<Array<{ name: string }>>(`/repos/${slug}/contents/.github/workflows`),
     ]);
+
     open = !meta
-      ? mark('open', 'unknown', `Could not read ${slug} — not checked`)
+      ? mark('open', 'unknown', `Could not read ${slug} — not checked`, 'If the repo is public, this will strike on the next check.')
       : meta.private
-        ? mark('open', 'not-yet', `${slug} is private`)
+        ? mark('open', 'not-yet', `${slug} is private`, 'Make the repo public in Settings → General → Danger Zone → Change visibility.')
         : mark('open', 'struck', `${slug} is public, last pushed ${fmtDate(meta.pushed_at)}`);
+
     docs = !readme
-      ? mark('docs', 'not-yet', `No README found in ${slug}`)
+      ? mark('docs', 'not-yet', `No README found in ${slug}`, 'Add a README.md at the repo root — what it does, how to run it, and who it is for.')
       : readme.size < 500
-        ? mark('docs', 'not-yet', `README in ${slug} is under 500 bytes`)
+        ? mark(
+            'docs',
+            'not-yet',
+            `README in ${slug} is ${readme.size} bytes, under the 500-byte bar`,
+            `Your README is ${readme.size} bytes; ${500 - readme.size} more would strike this. A setup section and a one-paragraph "what this is" usually covers it.`,
+          )
         : mark('docs', 'struck', `README in ${slug} is ${(readme.size / 1024).toFixed(1)}kb`);
+
+    // Signals — context on the builder's own certificate only. Never scored, never ranked.
+    if (Array.isArray(workflows)) {
+      signals.push({
+        id: 'tests',
+        label: 'Continuous integration',
+        value: `${workflows.length} workflow${workflows.length === 1 ? '' : 's'} in .github/workflows`,
+        positive: true,
+      });
+    } else if (meta) {
+      signals.push({ id: 'tests', label: 'Continuous integration', value: 'No workflows found', positive: false });
+    }
+
+    if (meta?.pushed_at) {
+      const days = Math.floor((Date.now() - Date.parse(meta.pushed_at)) / 86_400_000);
+      signals.push({
+        id: 'fresh',
+        label: 'Last activity',
+        value: days <= 0 ? 'pushed today' : `pushed ${days} day${days === 1 ? '' : 's'} ago`,
+        positive: days <= FRESH_DAYS,
+      });
+    }
   }
 
   return {
@@ -149,6 +210,7 @@ async function assayShip(pr: RawPr, project: number): Promise<Ship> {
     oneLiner: oneLiner(body),
     profileUrls: profileUrls(body),
     marks: [ship, live, docs, open],
+    signals,
   };
 }
 

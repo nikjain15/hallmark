@@ -83,6 +83,7 @@ export default async function Image({ params }: { params: Promise<{ handle: stri
       id,
       state: 'not-yet' as const,
       detail: '',
+      remedy: null,
     }));
 
   const prod = builder?.ships[0]?.productionUrl ?? null;
