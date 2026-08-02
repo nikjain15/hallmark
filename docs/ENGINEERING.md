@@ -89,7 +89,26 @@ that is itself verifiable, e.g. a PR against this repo, so the provenance chain 
 
 ## Other known debt (not the accepted one, listed for honesty)
 
-- No automated end-to-end test — a rendering regression that still compiles would ship.
+- **E2E gates release, not merge** — the 23-case suite (`npm run test:e2e`) runs against a
+  deployed URL, so it cannot block a PR the way the unit suite does.
 - Parser tests written from real body shapes rather than a versioned corpus of all 32.
 - `FAILURE_MODES.md` §F2 is guarded by a comment rather than a test.
 - No screen-reader or automated accessibility pass (`UX.md` §Accessibility).
+- The deploy token is a **personal** GitHub token, so this site's builds spend the owner's
+  individual quota (`FAILURE_MODES.md` §F6). A dedicated read-only fine-grained token would
+  contain the blast radius to this project.
+
+## What the test suites caught
+
+Worth recording, because it is the argument for having written them at all. Within an hour of
+existing, the E2E suite found:
+
+- **F7** — a rate-limited build had shipped an empty roster over a working deployment. Every
+  route returned 200 throughout, so a status-code smoke test would have passed. The roster
+  assertion failed immediately.
+- **F6** — traced from the same incident: the badge route was dynamic and would have run a
+  ~100-call assay on every README embed.
+
+Both are now fixed, guarded, and written up. The suite also produced two false alarms of its
+own (React's `<!-- -->` separators and `$undefined` flight markers), which is a fair reminder
+that a new test suite is itself unverified code.
